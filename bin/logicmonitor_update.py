@@ -1,6 +1,6 @@
 import sys
 import json
-import urllib2
+import urllib
 import base64
 import csv
 import gzip
@@ -26,19 +26,19 @@ def send_request(url, device_id, property_name, property_value, token, user_agen
     sys.stderr.write("INFO Sending POST request to url=%s with size=%d bytes payload\n" % (url, len(body)))
     sys.stderr.write("DEBUG Body: %s\n" % body)
     try:
-        req = urllib2.Request(url, body, {"Content-Type": "application/json", "User-Agent": user_agent})
+        req = urllib.request.Request(url, body, {"Content-Type": "application/json", "User-Agent": user_agent})
         req.add_header("X-HTTP-Method-Override", "PATCH")
         req.add_header("Authorization", "Bearer %s" % token) 
-        res = urllib2.urlopen(req)
+        res =  urllib.request.urlopen(req)
         if 200 <= res.code < 300:
             sys.stderr.write("INFO LogicMonitor responded with HTTP status=%d\n" % res.code)
             return True
         else:
             sys.stderr.write("ERROR LogicMonitor responded with HTTP status=%d\n" % res.code)
             return False
-    except urllib2.HTTPError as e:
+    except urllib.error.HTTPError as e:
         sys.stderr.write("ERROR Error sending LogicMonitor request: %s\n" % e)
-    except urllib2.URLError as e:
+    except urllib.error.URLError as e:
         sys.stderr.write("ERROR Error sending LogicMonitor request: %s\n" % e)
     except ValueError as e:
         sys.stderr.write("ERROR Invalid URL: %s\n" % e)
