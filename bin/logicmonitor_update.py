@@ -35,6 +35,7 @@ def send_request(url, device_id, property_name, property_value, token, user_agen
             headers={
                 "Content-Type": "application/json",
                 "User-Agent": user_agent,
+                "X-Version": "3",
                 "Authorization": "Bearer %s" % token
             }
         )
