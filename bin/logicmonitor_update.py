@@ -1,6 +1,7 @@
 import sys
 import json
-import urllib
+import urllib.request
+import urllib.error
 import base64
 import csv
 import gzip
@@ -24,9 +25,9 @@ def send_request(url, device_id, property_name, property_value, token, user_agen
     }
     body = json.dumps(body_dict)
     sys.stderr.write("INFO Sending POST request to url=%s with size=%d bytes payload\n" % (url, len(body)))
-    sys.stderr.write("DEBUG Body: %s\n" % body)
+    sys.stderr.write("INFO Body: %s\n" % body)
     try:
-        req = urllib.request.Request(url, body, {"Content-Type": "application/json", "User-Agent": user_agent})
+        req = urllib.request.Request(url, body.encode('utf-8'), {"Content-Type": "application/json", "User-Agent": user_agent})
         req.add_header("X-HTTP-Method-Override", "PATCH")
         req.add_header("Authorization", "Bearer %s" % token) 
         res =  urllib.request.urlopen(req)
