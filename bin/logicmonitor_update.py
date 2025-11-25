@@ -24,12 +24,21 @@ def send_request(url, device_id, property_name, property_value, token, user_agen
         ]
     }
     body = json.dumps(body_dict)
+    body_bytes = body.encode('utf-8')
     sys.stderr.write("INFO Sending POST request to url=%s with size=%d bytes payload\n" % (url, len(body)))
     sys.stderr.write("INFO Body: %s\n" % body)
     try:
-        req = urllib.request.Request(url, body.encode('utf-8'), {"Content-Type": "application/json", "User-Agent": user_agent})
-        req.add_header("X-HTTP-Method-Override", "PATCH")
-        req.add_header("Authorization", "Bearer %s" % token) 
+        req = urllib.request.Request(
+            url,
+            data=body_bytes,
+            method="PATCH",
+            headers={
+                "Content-Type": "application/json",
+                "User-Agent": user_agent,
+                "Authorization": "Bearer %s" % token
+            }
+        )
+        
         res =  urllib.request.urlopen(req)
         if 200 <= res.code < 300:
             sys.stderr.write("INFO LogicMonitor responded with HTTP status=%d\n" % res.code)
