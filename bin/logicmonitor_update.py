@@ -1,0 +1,50 @@
+import sys
+import json
+import urllib2
+import base64
+import csv
+import gzip
+from collections import OrderedDict
+
+
+def send_webhook_request(url, body, user_agent=None):
+    if url is None:
+        sys.stderr.write("ERROR No URL provided\n")
+        return False
+    sys.stderr.write("INFO Sending POST request to url=%s with size=%d bytes payload\n" % (url, len(body)))
+    sys.stderr.write("DEBUG Body: %s\n" % body)
+    try:
+        req = urllib2.Request(url, body, {"Content-Type": "application/json", "User-Agent": user_agent})
+        base64string = base64.encodestring('%s:%s' % ("swscripter","abcd")).replace('\n', '')
+        req.add_header("Authorization", "Basic %s" % base64string) 
+        res = urllib2.urlopen(req)
+        if 200 <= res.code < 300:
+            sys.stderr.write("INFO Webhook receiver responded with HTTP status=%d\n" % res.code)
+            return True
+        else:
+            sys.stderr.write("ERROR Webhook receiver responded with HTTP status=%d\n" % res.code)
+            return False
+    except urllib2.HTTPError as e:
+        sys.stderr.write("ERROR Error sending webhook request: %s\n" % e)
+    except urllib2.URLError as e:
+        sys.stderr.write("ERROR Error sending webhook request: %s\n" % e)
+    except ValueError as e:
+        sys.stderr.write("ERROR Invalid URL: %s\n" % e)
+    return False
+
+
+if __name__ == "__main__":
+    if len(sys.argv) < 2 or sys.argv[1] != "--execute":
+        sys.stderr.write("FATAL Unsupported execution mode (expected --execute flag)\n")
+        sys.exit(1)
+    try:
+        settings = json.loads(sys.stdin.read())
+        url = settings['configuration'].get('url')
+        body = settings['configuration'].get('body')
+#       body = settings.get('result')
+        user_agent = settings['configuration'].get('user_agent', 'Splunk')
+        if not send_webhook_request(url, body, user_agent=user_agent):
+            sys.exit(2)
+    except Exception as e:
+        sys.stderr.write("ERROR Unexpected error: %s\n" % e)
+        sys.exit(3)
