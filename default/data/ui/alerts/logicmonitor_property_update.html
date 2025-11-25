@@ -1,15 +1,22 @@
 <form class="form-horizontal form-complex">
     <div class="control-group">
-        <label class="control-label" for="webhook_url">LM URL</label>
+        <label class="control-label" for="deviceId">Device ID</label>
         <div class="controls">
-            <input type="text" class="input-xlarge" name="action.webhook_sw.param.url" id="webhook_url" placeholder="https://your.server.com/foo/bar" />
+            <input type="text" class="input-xlarge" name="action.logicmonitor_update.param.device_id" id="deviceId" placeholder="12345" />
         </div>
     </div>
 
     <div class="control-group">
-        <label class="control-label" for="webhook_body">LM Body</label>
+        <label class="control-label" for="propertyName">Property to Update</label>
         <div class="controls">
-            <input type="text" class="input-xlarge" name="action.webhook_sw.param.body" id="webhook_body" placeholder="Payload here" />
+            <input type="text" class="input-xlarge" name="action.logicmonitor_update.param.propertyName" id="propertyName" placeholder="MyCoolProperty" />
+        </div>
+    </div>
+
+    <div class="control-group">
+        <label class="control-label" for="propertyValue">Property Value</label>
+        <div class="controls">
+            <input type="text" class="input-xlarge" name="action.logicmonitor_update.param.propertyValue" id="propertyValue" placeholder="NewValue" />
         </div>
     </div>
 </form>
