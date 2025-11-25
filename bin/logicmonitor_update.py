@@ -15,7 +15,7 @@ def send_webhook_request(url, body, user_agent=None):
     sys.stderr.write("DEBUG Body: %s\n" % body)
     try:
         req = urllib2.Request(url, body, {"Content-Type": "application/json", "User-Agent": user_agent})
-        base64string = base64.encodestring('%s:%s' % ("swscripter","abcd")).replace('\n', '')
+        base64string = base64.encodestring('%s:%s' % ("user","pass")).replace('\n', '')
         req.add_header("Authorization", "Basic %s" % base64string) 
         res = urllib2.urlopen(req)
         if 200 <= res.code < 300:
