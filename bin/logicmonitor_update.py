@@ -16,7 +16,7 @@ def send_request(url, device_id, property_name, property_value, token, user_agen
     url = url.rstrip("/") + "/device/devices/%s?patchFields=customProperties&opType=replace" % device_id
 
     body_dict = {
-        "CustomProperties": [
+        "customProperties": [
             {
                 "name": property_name,
                 "value": "test"
