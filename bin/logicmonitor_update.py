@@ -19,7 +19,7 @@ def send_request(url, device_id, property_name, property_value, token, user_agen
         "customProperties": [
             {
                 "name": property_name,
-                "value": "test"
+                "value": property_value
             }
         ]
     }
